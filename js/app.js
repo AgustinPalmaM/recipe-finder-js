@@ -35,6 +35,12 @@ function startApp() {
 
   function showRecipe(recipe = []) {
     cleanHTML(result);
+
+    const heading = document.createElement('H2');
+    heading.classList.add('text-center', 'text-black', 'my-5');
+    heading.textContent = recipe.length ? `${recipe.length} Results` : 'There is not results';
+    result.appendChild(heading);
+
     recipe.forEach(recipe => {
       const { idMeal, strMeal, strMealThumb } = recipe;
 
@@ -76,7 +82,7 @@ function startApp() {
 
   function cleanHTML(element) {
     while (element.firstChild) {
-      element.removeChild(result.firstChild);
+      element.firstChild.remove();
     }
   }
 }
