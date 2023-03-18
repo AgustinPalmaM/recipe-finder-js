@@ -1,6 +1,7 @@
 function startApp() {
 
   const selectCategories = document.querySelector('#categorias');
+  selectCategories.addEventListener( 'change', selectCategory );
   
   getCategories();
 
@@ -15,10 +16,17 @@ function startApp() {
   function showCategories(categories = []) {
     categories.forEach(category => {
       const option = document.createElement('OPTION');
-      option.value = category.strCategory;
-      option.textContent = category.strCategory;
+      const { strCategory } = category;
+      option.value = strCategory;
+      option.textContent = strCategory;
       selectCategories.appendChild(option);
     })
+  }
+
+  function selectCategory(e) {
+    const category = e.target.value;
+    const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${ category }`;
+    console.log(url);
   }
 }
 
