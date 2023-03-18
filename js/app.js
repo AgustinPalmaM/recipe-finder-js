@@ -26,7 +26,9 @@ function startApp() {
   function selectCategory(e) {
     const category = e.target.value;
     const url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${ category }`;
-    console.log(url);
+    fetch(url)
+      .then(response => response.json())
+      .then(data => console.log(data.meals))
   }
 }
 
