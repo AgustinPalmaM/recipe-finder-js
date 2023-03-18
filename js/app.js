@@ -65,6 +65,9 @@ function startApp() {
       const recipeButton = document.createElement('BUTTON');
       recipeButton.classList.add('btn', 'btn-danger', 'w-100');
       recipeButton.textContent = 'Watch recipe';
+      recipeButton.onclick = function() {
+        selectRecipe(idMeal);
+      }
 
       recipeBody.appendChild(recipeHeading);
       recipeBody.appendChild(recipeButton);
@@ -76,8 +79,18 @@ function startApp() {
 
       result.appendChild(recipeContainer);
 
-      console.log(recipeButton);
     })
+  }
+
+  function selectRecipe(id) {
+    const url = `https://themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+    fetch(url)
+      .then(response => response.json())
+      .then(data => showRecipeModal(data.meals[0]))
+  }
+
+  function showRecipeModal(data) {
+    console.log(data);
   }
 
   function cleanHTML(element) {
