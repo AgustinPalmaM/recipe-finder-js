@@ -124,6 +124,23 @@ function startApp() {
     }
     modalBody.appendChild(listGroup);
 
+    
+    const modalFooter = document.querySelector('.modal-footer');
+    cleanHTML(modalFooter);
+
+    const btnFavorite = document.createElement('BUTTON');
+    btnFavorite.classList.add('btn', 'btn-danger', 'col');
+    btnFavorite.textContent = 'Save favorite';
+    modalFooter.appendChild(btnFavorite);
+
+    const btnCloseModal = document.createElement('BUTTON');
+    btnCloseModal.classList.add('btn', 'btn-secondary', 'col');
+    btnCloseModal.textContent = 'Close';
+    modalFooter.appendChild(btnCloseModal);
+    btnCloseModal.onclick = function() {
+      modal.hide();
+    }
+
     modal.show();
   }
 
