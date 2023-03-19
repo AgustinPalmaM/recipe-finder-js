@@ -134,6 +134,11 @@ function startApp() {
     modalFooter.appendChild(btnFavorite);
 
     btnFavorite.onclick = function() {
+
+      if(checkStorage(idMeal)) {
+        return
+      }
+
       addFavorite({
         id: idMeal,
         title: strMeal,
@@ -153,8 +158,13 @@ function startApp() {
   }
 
   function addFavorite( recipeObject ) {
-    const favorite = JSON.parse(localStorage.getItem('favorites')) ?? [];
-    localStorage.setItem('favorites', JSON.stringify([...favorite, recipeObject]));
+    const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+    localStorage.setItem('favorites', JSON.stringify([...favorites, recipeObject]));
+  }
+
+  function checkStorage(id) {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+    return favorites.some(favorite => favorite.id === id);
   }
 
   function cleanHTML(element) {
