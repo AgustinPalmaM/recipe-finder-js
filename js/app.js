@@ -133,6 +133,14 @@ function startApp() {
     btnFavorite.textContent = 'Save favorite';
     modalFooter.appendChild(btnFavorite);
 
+    btnFavorite.onclick = function() {
+      addFavorite({
+        id: idMeal,
+        title: strMeal,
+        img: strMealThumb
+      });
+    }
+
     const btnCloseModal = document.createElement('BUTTON');
     btnCloseModal.classList.add('btn', 'btn-secondary', 'col');
     btnCloseModal.textContent = 'Close';
@@ -142,6 +150,11 @@ function startApp() {
     }
 
     modal.show();
+  }
+
+  function addFavorite( recipeObject ) {
+    const favorite = JSON.parse(localStorage.getItem('favorites')) ?? [];
+    localStorage.setItem('favorites', JSON.stringify([...favorite, recipeObject]));
   }
 
   function cleanHTML(element) {
