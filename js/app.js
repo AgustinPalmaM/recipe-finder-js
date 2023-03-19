@@ -1,3 +1,4 @@
+
 function startApp() {
 
   const selectCategories = document.querySelector('#categorias');
@@ -130,12 +131,14 @@ function startApp() {
 
     const btnFavorite = document.createElement('BUTTON');
     btnFavorite.classList.add('btn', 'btn-danger', 'col');
-    btnFavorite.textContent = 'Save favorite';
+    btnFavorite.textContent = checkStorage(idMeal) ? 'Delete favorite' : 'Save favorite';
     modalFooter.appendChild(btnFavorite);
 
     btnFavorite.onclick = function() {
 
       if(checkStorage(idMeal)) {
+        deleteFavorite(idMeal);
+        btnFavorite.textContent = 'Save favorite';
         return
       }
 
@@ -144,6 +147,8 @@ function startApp() {
         title: strMeal,
         img: strMealThumb
       });
+
+      btnFavorite.textContent = 'Delete favorite';
     }
 
     const btnCloseModal = document.createElement('BUTTON');
@@ -160,6 +165,12 @@ function startApp() {
   function addFavorite( recipeObject ) {
     const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
     localStorage.setItem('favorites', JSON.stringify([...favorites, recipeObject]));
+  }
+
+  function deleteFavorite(id) {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+    const newFavorites = favorites.filter(favorite => favorite.id !== id);
+    localStorage.setItem('favorites', JSON.stringify(newFavorites));
   }
 
   function checkStorage(id) {
