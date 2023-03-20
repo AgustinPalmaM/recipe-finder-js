@@ -1,14 +1,21 @@
 
 function startApp() {
-
-  const selectCategories = document.querySelector('#categorias');
-  selectCategories.addEventListener( 'change', selectCategory );
-
+  
   const result = document.querySelector('#resultado');
+  const selectCategories = document.querySelector('#categorias');
+  if(selectCategories) {
+    selectCategories.addEventListener( 'change', selectCategory );
+    getCategories();
+  }
+
+  const favoritesDiv = document.querySelector('.favoritos');
+  if (favoritesDiv) {
+    getFavorites();
+  }
+
 
   const modal = new bootstrap.Modal('#modal', {});
   
-  getCategories();
 
   function getCategories() {
     const url = 'https://www.themealdb.com/api/json/v1/1/categories.php';
@@ -49,27 +56,28 @@ function startApp() {
 
       const recipeContainer = document.createElement('DIV');
       recipeContainer.classList.add('col-md-4');
+      recipeContainer.dataset.id = idMeal ?? recipe.id;
 
       const recipeCard = document.createElement('DIV');
       recipeCard.classList.add('card', 'mb-4');
 
       const recipeImage = document.createElement('IMG');
       recipeImage.classList.add('card-img-top');
-      recipeImage.alt = `Recipe image ${strMeal}`;
-      recipeImage.src = strMealThumb;
+      recipeImage.alt = `Recipe image ${strMeal ?? recipe.title}`;
+      recipeImage.src = strMealThumb ?? recipe.img;
 
       const recipeBody = document.createElement('DIV');
       recipeBody.classList.add('card-body');
       
       const recipeHeading = document.createElement('H3');
       recipeHeading.classList.add('card-title', 'mb-3');
-      recipeHeading.textContent = strMeal;
+      recipeHeading.textContent = strMeal ?? recipe.title;
       
       const recipeButton = document.createElement('BUTTON');
       recipeButton.classList.add('btn', 'btn-danger', 'w-100');
       recipeButton.textContent = 'Watch recipe';
       recipeButton.onclick = function() {
-        selectRecipe(idMeal);
+        selectRecipe(idMeal ?? recipe.id);
       }
 
       recipeBody.appendChild(recipeHeading);
@@ -173,6 +181,9 @@ function startApp() {
     const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
     const newFavorites = favorites.filter(favorite => favorite.id !== id);
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
+    showRecipe(newFavorites);
+    modal.hide();
+
   }
 
   function checkStorage(id) {
@@ -187,6 +198,19 @@ function startApp() {
     toastBody.textContent = message;
     toast.show();
 
+  }
+
+  function getFavorites() {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+    if (favorites.length) {
+      showRecipe(favorites)
+    }
+
+    const noFavorites = document.createElement('P');
+    noFavorites.classList.add('fs-4', 'text-center', 'font-bold', 'mt-5');
+    noFavorites.textContent = 'No favorites yet';
+
+    favoritesDiv.appendChild(noFavorites);
   }
 
   function cleanHTML(element) {
